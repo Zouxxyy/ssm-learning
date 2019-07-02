@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zouxxyy.mybatis.dao.DepartmentMapper">
+
+    <select id="getDeptById" resultType="com.zouxxyy.mybatis.bean.Department">
+        select id, dept_name departmentName from tbl_dept where id = #{id}
+    </select>
+
+    <!--按照部门ID查出部门全部信息，包括部门的所有员工（多个）。 采用分步查询-->
+    <resultMap id="MyDeptStep" type="com.zouxxyy.mybatis.bean.Department">
+        <id column="id" property="id"/>
+        <result column="dept_name" property="departmentName"/>
+        <!--分步查询的column可以是多个，用map封装-->
+        <collection property="emps"
+                    select="com.zouxxyy.mybatis.dao.EmployeeMapperPlus.getEmpsByDeptId"
+                    column="{deptId=id}">
+        </collection>
+    </resultMap>
+    <select id="getDeptByIdStep" resultMap="MyDeptStep">
+        select id, dept_name from tbl_dept where id = #{id}
+    </select>
+
+</mapper>
+

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zouxxyy.mybatis.dao.EmployeeMapper">
+
+    <select id="getEmptyByLastNameReturnMap" resultType="com.zouxxyy.mybatis.bean.Employee">
+        select * from tbl_employee where last_name = #{lastName}
+    </select>
+
+    <select id="getEmpById" resultType="com.zouxxyy.mybatis.bean.Employee">
+       select * from tbl_employee where id = #{id}
+    </select>
+
+    <select id="getEmpByLastName" resultType="com.zouxxyy.mybatis.bean.Employee">
+        select * from tbl_employee where last_name = #{lastName}
+    </select>
+
+    <select id="getEmpByIdAndLastName" resultType="com.zouxxyy.mybatis.bean.Employee">
+        select * from tbl_employee where id = #{id} and last_name = #{lastName}
+    </select>
+
+    <select id="getEmpByMap" resultType="com.zouxxyy.mybatis.bean.Employee">
+        select * from tbl_employee where id = #{id} and last_name = #{lastName}
+    </select>
+
+    <!--获取自增主键的值，并封装到javabean的属性中-->
+    <insert id="addEmp" useGeneratedKeys="true" keyProperty="id">
+        insert into tbl_employee(last_name, email, gender)
+        values (#{lastName}, #{email}, #{gender})
+    </insert>
+
+    <update id="updateEmp">
+        update tbl_employee
+        set last_name=#{lastName}, email=#{email}, gender=#{gender}
+        where id=#{id}
+    </update>
+
+    <delete id="deleteEmpById">
+        delete from tbl_employee where id=#{id}
+    </delete>
+
+</mapper>
+

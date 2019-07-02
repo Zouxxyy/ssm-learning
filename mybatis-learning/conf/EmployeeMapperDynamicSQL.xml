@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zouxxyy.mybatis.dao.EmployeeMapperDynamicSQL">
+    <!--查询员工，如果员工对象含有某个字段，就检测它，用if功能实现-->
+    <!--为了避免第一个条件没通过，sql拼装会有问题，采用下面的解决方式-->
+    <select id="getEmpsByConditionIf" resultType="com.zouxxyy.mybatis.bean.Employee">
+        <!--方式1， 采用where 1 = 1 -->
+        <!--select * from tbl_employee-->
+        <!--where 1 = 1-->
+        <!--<if test="id != null">-->
+            <!--and id=#{id}-->
+        <!--</if>-->
+        <!--<if test="lastName != null and lastName != ''">-->
+            <!--and last_name like #{lastName}-->
+        <!--</if>-->
+        <!--<if test="email != null and email.trim() != ''">-->
+            <!--and email=#{email}-->
+        <!--</if>-->
+        <!--<if test="gender == 0 or gender == 1">-->
+            <!--and gender=#{gender}-->
+        <!--</if>-->
+
+        <!--方式2， 采用where标签-->
+        select * from tbl_employee
+        <where>
+            <if test="id != null">
+                id=#{id}
+            </if>
+            <if test="lastName != null and lastName != ''">
+                and last_name like #{lastName}
+            </if>
+            <if test="email != null and email.trim() != ''">
+                and email=#{email}
+            </if>
+            <if test="gender == 0 or gender == 1">
+                and gender=#{gender}
+            </if>
+        </where>
+
+    </select>
+
+
+</mapper>
+

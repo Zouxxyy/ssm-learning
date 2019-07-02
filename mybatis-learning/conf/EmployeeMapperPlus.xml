@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zouxxyy.mybatis.dao.EmployeeMapperPlus">
+
+    <!--自定义某个javabean的封装规则-->
+    <resultMap id="MyEmp" type="com.zouxxyy.mybatis.bean.Employee">
+        <!--主键用id-->
+        <id column="id" property="id"/>
+        <result column="last_name" property="lastName"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+    </resultMap>
+    <select id="getEmpById" resultMap="MyEmp">
+        select * from tbl_employee where id = #{id}
+    </select>
+
+    <!--封装复杂属性的javabean(含对象)-->
+    <resultMap id="MydifEmp" type="com.zouxxyy.mybatis.bean.Employee">
+        <id column="id" property="id"/>
+        <result column="last_name" property="lastName"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+        <result column="did" property="dept.id"/>
+        <result column="dept_name" property="dept.departmentName"/>
+    </resultMap>
+    <select id="getEmpAndDept" resultMap="MydifEmp">
+        select e.id id, e.last_name last_name, e.gender gender, e.d_id d_id, e.email email,
+               d.id did, d.dept_name dept_name from tbl_employee e, tbl_dept d
+        where e.d_id = d.id and e.id = #{id}
+    </select>
+
+    <!--按照员工ID查出员工全部信息，包括员工所在部门（1个）。 采用分步查询-->
+    <resultMap id="MyEmpByStep" type="com.zouxxyy.mybatis.bean.Employee">
+        <id column="id" property="id"/>
+        <result column="last_name" property="lastName"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+        <!--使用指定的方法，与column传入的值，查出对象-->
+        <association property="dept"
+                     select="com.zouxxyy.mybatis.dao.DepartmentMapper.getDeptById"
+                     column="d_id">
+        </association>
+    </resultMap>
+    <select id="getEmpByIdStep" resultMap="MyEmpByStep">
+        select * from tbl_employee where id = #{id}
+    </select>
+
+    <select id="getEmpsByDeptId" resultType="com.zouxxyy.mybatis.bean.Employee">
+        select * from tbl_employee where d_id = #{deptId}
+    </select>
+
+</mapper>
+
