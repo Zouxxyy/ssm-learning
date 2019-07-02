@@ -31,6 +31,13 @@ public class Department {
         this.emps = emps;
     }
 
+    public Department() {
+    }
+
+    public Department(Integer id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Department{" +

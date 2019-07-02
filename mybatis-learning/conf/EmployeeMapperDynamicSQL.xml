@@ -23,7 +23,7 @@
             <!--and gender=#{gender}-->
         <!--</if>-->
 
-        <!--方式2， 采用where标签-->
+        <!--方式2， 采用where标签，封装查询条件-->
         select * from tbl_employee
         <where>
             <if test="id != null">
@@ -42,6 +42,101 @@
 
     </select>
 
+    <select id="getEmpsByConditionTrim" resultType="com.zouxxyy.mybatis.bean.Employee">
+        select * from tbl_employee
+        <trim prefix="where" suffixOverrides="and">
+            <if test="id != null">
+                id=#{id} and
+            </if>
+            <if test="lastName != null and lastName != ''">
+                last_name like #{lastName} and
+            </if>
+            <if test="email != null and email.trim() != ''">
+                email=#{email} and
+            </if>
+            <if test="gender == 0 or gender == 1">
+                gender=#{gender} and
+            </if>
+        </trim>
+    </select>
+
+    <select id="getEmpsByConditionChoose" resultType="com.zouxxyy.mybatis.bean.Employee">
+        select * from tbl_employee
+        <where>
+            <choose>
+                <when test="id != null">
+                    id = #{id}
+                </when>
+                <when test="lastName != null">
+                    last_name like #{lastName}
+                </when>
+                <otherwise>
+                    gender = 0
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <!-- 采用set标签，封装设置条件-->
+    <update id="updateEmp">
+        update tbl_employee
+        <set>
+            <if test="lastName != null">
+                last_name = #{lastName},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="gender != null">
+                gender = #{gender}
+            </if>
+            where id = #{id}
+        </set>
+    </update>
+
+    <!--遍历-->
+    <select id="getEmpsByConditionForeach" resultType="com.zouxxyy.mybatis.bean.Employee">
+        select * from tbl_employee where id in
+        <foreach collection="ids" item="item_id" separator="," open="(" close=")" index="i">
+            #{item_id}
+        </foreach>
+    </select>
+
+    <insert id="addEmps">
+        <!--方式1-->
+        insert into tbl_employee(last_name, email, gender, d_id)
+        values
+        <foreach collection="emps" item="emp" separator=",">
+            (#{emp.lastName}, #{emp.email}, #{emp.gender}, #{emp.dept.id})
+        </foreach>
+
+        <!--方式2 批量操作，需要修改数据库连接属性：allowMultiQeries=true-->
+        <!--<foreach collection="emps" item="emp" separator=";">-->
+            <!--insert into tbl_employee(last_name, email, gender, d_id)-->
+            <!--values (#{emp.lastName}, #{emp.email}, #{emp.gender}, #{emp.dept.id})-->
+        <!--</foreach>-->
+    </insert>
+
+    <!--有两个内置参数，_databaseId， _parameter-->
+    <select id="getEmpsTestInnerParameter" resultType="com.zouxxyy.mybatis.bean.Employee">
+        <!--用bind标签，将OCNL的值绑定到一个变量上-->
+        <bind name="_lastName" value="'%' + lastName + '%'"/>
+        <if test="_parameter != null ">
+            select * from tbl_employee
+            where last_name like #{_lastName}
+        </if>
+    </select>
+
+    <!--抽取可以复用的sql-->
+    <!-- 用 <include refid="test"/> 引用 -->
+    <select id="test" resultType="com.zouxxyy.mybatis.bean.Employee">
+        <include refid="test">
+            <property name="mypara" value="abc"/>
+        </include>
+    </select>
+    <sql id="test">
+        select ${mypara} from tbl_employee
+    </sql>
 
 </mapper>
 

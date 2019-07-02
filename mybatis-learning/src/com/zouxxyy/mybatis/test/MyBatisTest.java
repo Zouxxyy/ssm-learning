@@ -13,9 +13,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MyBatisTest {
 
@@ -168,11 +166,33 @@ public class MyBatisTest {
             EmployeeMapperDynamicSQL mapper = openSession.getMapper(EmployeeMapperDynamicSQL.class);
 
 
-            Employee employee = new Employee(null, "Cat", null, null);
-            List<Employee> employeeList = mapper.getEmpsByConditionIf(employee);
-            for (Employee e : employeeList) {
-                System.out.println(e);
-            }
+            // 动态sql :if , where, trim, choose, foreach 测试
+            // Employee employee = new Employee(null, "Cat", null, null);
+            // List<Employee> employeeList = mapper.getEmpsByConditionIf(employee);
+            // List<Employee> employeeList1 = mapper.getEmpsByConditionTrim(employee);
+            // List<Employee> employeeList2 = mapper.getEmpsByConditionChoose(employee);
+            // List<Employee> employeeList3 = mapper.getEmpsByConditionForeach(Arrays.asList(1,3));
+            // for (Employee e : employeeList3) {
+            //     System.out.println(e);
+            // }
+
+            // 动态sql : set 测试
+            // Employee employee = new Employee(3, "Dog", null, "0");
+            // mapper.updateEmp(employee);
+            // openSession.commit();
+
+            // 一次添加多个对象
+            // List<Employee> emps = new ArrayList<>();
+            // emps.add(new Employee(null, "May", "May@163.com", "0", new Department(1)));
+            // emps.add(new Employee(null, "Big", "Big@163.com", "1", new Department(2)));
+            // mapper.addEmps(emps);
+            // openSession.commit();
+
+            // 测试内置参数
+             List<Employee> employeeList = mapper.getEmpsTestInnerParameter(new Employee(null, "a", null, null));
+             for (Employee e : employeeList) {
+                 System.out.println(e);
+             }
         }
         finally{
             openSession.close();
