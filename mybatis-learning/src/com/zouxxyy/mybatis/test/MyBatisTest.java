@@ -188,7 +188,7 @@ public class MyBatisTest {
             // mapper.addEmps(emps);
             // openSession.commit();
 
-            // 测试内置参数
+            // 测试内置的参数
              List<Employee> employeeList = mapper.getEmpsTestInnerParameter(new Employee(null, "a", null, null));
              for (Employee e : employeeList) {
                  System.out.println(e);
