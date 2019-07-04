@@ -4,6 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zouxxyy.mybatis.dao.DepartmentMapper">
 
+    <!--引用和EmployeeMapper一样的缓存策略-->
+    <cache-ref namespace="com.zouxxyy.mybatis.dao.EmployeeMapper"/>
+
     <select id="getDeptById" resultType="com.zouxxyy.mybatis.bean.Department">
         select id, dept_name departmentName from tbl_dept where id = #{id}
     </select>

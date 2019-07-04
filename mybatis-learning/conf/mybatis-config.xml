@@ -9,6 +9,8 @@
 		<!--延时加载-->
 		<setting name="lazyLoadingEnabled" value="true"/>
 		<setting name="aggressiveLazyLoading" value="false"/>
+        <!--开启全局二级缓存-->
+		<setting name="cacheEnabled" value="true"/>
 	</settings>
 	
 

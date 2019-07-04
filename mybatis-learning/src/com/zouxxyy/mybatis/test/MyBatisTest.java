@@ -199,12 +199,53 @@ public class MyBatisTest {
         }
     }
 
+    // 缓存测试
+    /*
+    1）cacheEnabled默认true，控制二级缓存
+    2）选择操作 useCache默认true，表示使用一级缓存
+    3）增删改操作 flushCache标签默认true，会自动清空一级二级缓存，选择操作默认false，不清空一级缓存
+    4）sqlSession.close()清空一级缓存
+     */
+    public static void test6() throws IOException {
+        // 1、获取sqlSessionFactory对象
+        String resource = "mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactory sqlSessionFactory =
+                new SqlSessionFactoryBuilder().build(inputStream);
+
+        // 2、获取sqlSession对象
+        SqlSession openSession1 = sqlSessionFactory.openSession();
+        SqlSession openSession2 = sqlSessionFactory.openSession();
+
+        try {
+            // 3. 获取接口的实现类对象
+            EmployeeMapper mapper1 = openSession1.getMapper(EmployeeMapper.class);
+            EmployeeMapper mapper2 = openSession2.getMapper(EmployeeMapper.class);
+
+            Employee employee1 = mapper1.getEmpById(1);
+            System.out.println(employee1);
+            // 关闭后，它才会从一级缓存进入二级缓存
+            openSession1.close();
+
+            // 第二次缓存是从二级缓存中获取数据的
+            Employee employee2 = mapper2.getEmpById(1);
+            System.out.println(employee2);
+            openSession2.close();
+
+
+        }
+        finally{
+
+        }
+    }
+
     public static void main(String[] args) throws IOException {
 
 //        MyBatisTest.test1();
 //        MyBatisTest.test2();
 //        MyBatisTest.test3();
 //        MyBatisTest.test4();
-        MyBatisTest.test5();
+//        MyBatisTest.test5();
+        MyBatisTest.test6();
     }
 }

@@ -4,6 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zouxxyy.mybatis.dao.EmployeeMapper">
 
+    <!--<cache eviction="LRU"></cache>原生二级缓存策略-->
+    <!--使用ehcache-->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+
     <select id="getEmptyByLastNameReturnMap" resultType="com.zouxxyy.mybatis.bean.Employee">
         select * from tbl_employee where last_name = #{lastName}
     </select>
