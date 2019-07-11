@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+
+    <!--视图解析器对象-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"/>
+
+
+    <!-- 非注解的 -->
+    <!-- 配置第一个Handler -->
+    <bean id="itemsController1" name="/queryItems1.action" class="com.zouxxyy.controller.ItemsController1"/>
+    <!-- 配置第二个Handler -->
+    <bean id="itemsController2" name="/queryItems2.action" class="com.zouxxyy.controller.ItemsController1"/>
+
+    <!-- 第一种非注解的处理器适配器，itemsController1根据它制作-->
+    <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/>
+    <!-- 第二种非注解的处理器适配器，itemsController2根据它制作-->
+    <bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter"/>
+
+    <!-- 第一种非注解的处理器映射器-->
+    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+    <!-- 第二种非注解的处理器映射器：简单url映射，多个映射器可以并存-->
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <!-- 对 itemsController进行url映射-->
+                <prop key="/queryItems11.action">itemsController1</prop>
+                <prop key="/queryItems22.action">itemsController2</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!--开启mvc注解支持 ，自动加载注解的映射器和适配器-->
+    <mvc:annotation-driven/>
+    <!--开启注解扫描，它扫描Handle-->
+    <context:component-scan base-package="com.zouxxyy.controller"/>
+
+
+
+
+</beans>
