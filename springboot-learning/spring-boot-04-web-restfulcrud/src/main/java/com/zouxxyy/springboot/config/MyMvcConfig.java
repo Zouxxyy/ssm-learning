@@ -31,7 +31,8 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
 //        super.addInterceptors(registry);
         // 静态资源做了静态资源映射，不需要处理
-        registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**")
-                .excludePathPatterns("/index.html", "/", "/user/login");
+        // 暂时关闭拦截，测试异常
+        // registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**")
+        //         .excludePathPatterns("/index.html", "/", "/user/login");
     }
 }
